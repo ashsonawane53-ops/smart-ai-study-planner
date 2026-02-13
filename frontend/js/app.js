@@ -13,9 +13,15 @@ async function initApp() {
 
     const user = await protectPage();
     if (typeof log === 'function') log('User authenticated: ' + (user ? user.name : 'No'));
+    if (user && user.academicLevel && typeof log === 'function') log('User Class/Level: ' + user.academicLevel);
 
     if (user) {
       document.getElementById('user-name').textContent = user.name;
+      const levelEl = document.getElementById('user-academic-level');
+      if (levelEl) {
+        levelEl.textContent = user.academicLevel || 'Not Set';
+        if (typeof log === 'function') log('Updating UI with Class: ' + (user.academicLevel || 'Default'));
+      }
     }
 
     if (typeof log === 'function') log('Loading stats...');
@@ -210,6 +216,34 @@ function displayPendingRevisions(revisions) {
   }).join('');
 
   container.innerHTML = html;
+}
+
+// Change academic level
+async function changeAcademicLevel() {
+  const newLevel = prompt('Enter your Academic Level (e.g., Class 10, UPSC, Graduation):');
+  if (!newLevel) return;
+
+  try {
+    if (typeof log === 'function') log('Updating Academic Level to: ' + newLevel);
+    const response = await fetch(`${API_URL}/auth/update-profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ academicLevel: newLevel })
+    });
+
+    if (!response.ok) throw new Error('Failed to update level');
+
+    const data = await response.json();
+    if (typeof log === 'function') log('Profile updated successfully!');
+
+    // Update UI
+    document.getElementById('user-academic-level').textContent = newLevel;
+    alert('Academic Level updated to ' + newLevel);
+  } catch (error) {
+    if (typeof log === 'function') log('Update Error: ' + error.message);
+    alert('Error updating profile: ' + error.message);
+  }
 }
 
 // Initialize on page load

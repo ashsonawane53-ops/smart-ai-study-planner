@@ -26,6 +26,13 @@
 
     <div class="container">
         <h1 class="mb-2">Welcome, <span id="user-name">Student</span>! 👋</h1>
+        <div class="academic-badge mb-3" id="user-academic-level"
+            style="display:inline-block; background: #6366f1; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">
+            Class 10
+        </div>
+        <button onclick="changeAcademicLevel()"
+            style="background:none; border:none; color:#6366f1; text-decoration:underline; cursor:pointer; font-size:0.875rem; margin-left:10px;">Change
+            Class</button>
 
         <!-- Stats Cards -->
         <div class="grid grid-4 mb-3">
@@ -98,21 +105,30 @@
 
     <!-- Debug Console -->
     <div id="debug-console"
-        style="position: fixed; bottom: 0; left: 0; right: 0; height: 150px; background: rgba(0,0,0,0.9); color: #0f0; font-family: monospace; padding: 10px; overflow-y: auto; z-index: 9999; border-top: 2px solid #0f0; font-size: 12px;">
-        <div>Debug Console Initialized...</div>
+        style="position: fixed; bottom: 0; left: 0; right: 0; height: 180px; background: #000; color: #00ff00; font-family: 'Courier New', monospace; padding: 15px; overflow-y: auto; z-index: 9999; border-top: 3px solid #00ff00; font-size: 13px; box-shadow: 0 -5px 15px rgba(0,255,0,0.2);">
+        <div
+            style="color: #00ff00; border-bottom: 1px solid #004400; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold;">
+            🟢 SYSTEM DIAGNOSTIC LOGS - AI STUDY PLANNER v1.0
+        </div>
+        <div id="log-entries"></div>
     </div>
 
     <script>
-        function log(msg) {
+        function log(msg, type = 'info') {
+            const entries = document.getElementById('log-entries');
+            if (!entries) return;
             const el = document.createElement('div');
-            el.textContent = `${new Date().toLocaleTimeString()} - ${msg}`;
-            document.getElementById('debug-console').prepend(el);
+            el.style.color = '#00ff00';
+            el.style.marginBottom = '4px';
+            el.style.textShadow = '0 0 5px rgba(0,255,0,0.5)';
+            el.textContent = `> ${new Date().toLocaleTimeString()} - ${msg}`;
+            entries.prepend(el);
             console.log(msg);
         }
         window.onerror = function (msg, url, line) {
-            log(`ERROR: ${msg} at ${url}:${line}`);
+            log(`CRITICAL ERROR: ${msg} at ${url}:${line}`, 'error');
         };
-        log('Page Loaded. Waiting for scripts...');
+        log('Page Loaded. Waiting for environment scripts...');
     </script>
 
     <script src="js/auth.js?v=AppNew"></script>

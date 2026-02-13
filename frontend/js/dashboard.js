@@ -4,19 +4,27 @@
 
 // Initialize dashboard
 async function initDashboard() {
+  if (typeof log === 'function') log('initDashboard called');
   try {
-    console.log('Dashboard initializing...');
+    if (typeof log === 'function') log('Checking protectPage...');
     if (typeof protectPage === 'undefined') {
       throw new Error('Auth script not loaded (protectPage missing)');
     }
 
     const user = await protectPage();
+    if (typeof log === 'function') log('User authenticated: ' + (user ? user.name : 'No'));
     if (user) {
       document.getElementById('user-name').textContent = user.name;
+      if (user.academicLevel) {
+        const levelEl = document.getElementById('user-academic-level');
+        if (levelEl) levelEl.textContent = user.academicLevel;
+      }
     }
 
+    if (typeof log === 'function') log('Loading stats...');
     loadDashboardStats();
   } catch (error) {
+    if (typeof log === 'function') log('CRITICAL ERROR: ' + error.message);
     alert('Dashboard logic failed: ' + error.message);
     console.error(error);
   }
@@ -25,13 +33,16 @@ async function initDashboard() {
 // Load all dashboard statistics
 async function loadDashboardStats() {
   try {
+    if (typeof log === 'function') log('Fetching stats from API...');
     const response = await fetch(`${API_URL}/dashboard/stats`, {
       credentials: 'include'
     });
 
+    if (typeof log === 'function') log('Stats response status: ' + response.status);
     if (!response.ok) throw new Error('Failed to load stats');
 
     const data = await response.json();
+    if (typeof log === 'function') log('Stats loaded successfully');
 
     // Update stat cards
     document.getElementById('total-hours').textContent = data.totalStudyHours;
@@ -201,6 +212,35 @@ function displayPendingRevisions(revisions) {
   }).join('');
 
   container.innerHTML = html;
+}
+
+// Change academic level
+async function changeAcademicLevel() {
+  const newLevel = prompt('Enter your Academic Level (e.g., Class 10, UPSC, Graduation):');
+  if (!newLevel) return;
+
+  try {
+    if (typeof log === 'function') log('Updating Academic Level to: ' + newLevel);
+    const response = await fetch(`${API_URL}/auth/update-profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ academicLevel: newLevel })
+    });
+
+    if (!response.ok) throw new Error('Failed to update level');
+
+    const data = await response.json();
+    if (typeof log === 'function') log('Profile updated successfully!');
+
+    // Update UI
+    const levelEl = document.getElementById('user-academic-level');
+    if (levelEl) levelEl.textContent = newLevel;
+    alert('Academic Level updated to ' + newLevel);
+  } catch (error) {
+    if (typeof log === 'function') log('Update Error: ' + error.message);
+    alert('Error updating profile: ' + error.message);
+  }
 }
 
 // Initialize on page load

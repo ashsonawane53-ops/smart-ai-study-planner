@@ -242,5 +242,101 @@ async function deleteTask(id) {
     }
 }
 
+// Open AI Plan Modal
+function openAIPlanModal() {
+    if (subjects.length === 0) {
+        alert('Please add subjects first!');
+        window.location.href = 'subjects.html';
+        return;
+    }
+
+    // Populate subjects checkboxes
+    const container = document.getElementById('ai-subjects-container');
+    container.innerHTML = subjects.map(s => `
+        <div class="form-check">
+            <input type="checkbox" id="subject-${s._id}" value="${s._id}" checked>
+            <label for="subject-${s._id}">${s.name}</label>
+        </div>
+    `).join('');
+
+    // Set default exam date to 7 days from now
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    document.getElementById('ai-exam-date').valueAsDate = nextWeek;
+
+    document.getElementById('ai-plan-modal').classList.add('active');
+}
+
+// Close AI Plan Modal
+function closeAIPlanModal() {
+    document.getElementById('ai-plan-modal').classList.remove('active');
+}
+
+// Handle AI Plan Form
+document.getElementById('ai-plan-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const selectedSubjectIds = Array.from(document.querySelectorAll('#ai-subjects-container input:checked')).map(cb => cb.value);
+    const selectedSubjectNames = subjects.filter(s => selectedSubjectIds.includes(s._id)).map(s => s.name);
+
+    if (selectedSubjectNames.length === 0) {
+        alert('Please select at least one subject');
+        return;
+    }
+
+    const availableHours = parseInt(document.getElementById('ai-hours').value);
+    const examDate = document.getElementById('ai-exam-date').value;
+    const academicLevel = document.getElementById('ai-academic-level').value;
+    const btn = document.getElementById('ai-plan-btn');
+
+    try {
+        btn.disabled = true;
+        btn.textContent = 'Generating Plan...';
+        if (typeof log === 'function') log(`Generating AI Plan for ${academicLevel}...`);
+
+        const response = await fetch(`${API_URL}/ai/generate-plan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ subjects: selectedSubjectNames, availableHours, examDate, academicLevel })
+        });
+
+        if (!response.ok) throw new Error('Failed to generate plan');
+
+        const plan = await response.json();
+
+        // Save tasks (sequentially to avoid overwhelming server)
+        for (const item of plan) {
+            // Find subject ID for the item
+            const subject = subjects.find(s => s.name.toLowerCase() === item.subject.toLowerCase()) || subjects[0];
+
+            const taskData = {
+                subjectId: subject._id,
+                title: `${item.topic} (${item.subject})`,
+                date: item.date,
+                duration: item.duration
+            };
+
+            await fetch(`${API_URL}/tasks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(taskData)
+            });
+        }
+
+        closeAIPlanModal();
+        alert(`Successfully created studying plan with ${plan.length} tasks!`);
+        loadTodayTasks();
+        loadAllTasks();
+
+    } catch (error) {
+        alert('Error generating plan: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate Plan';
+    }
+});
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', init);

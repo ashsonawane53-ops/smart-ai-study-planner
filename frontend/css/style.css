@@ -503,8 +503,13 @@ select.form-control {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Utility Classes */
@@ -512,13 +517,29 @@ select.form-control {
   text-align: center;
 }
 
-.mt-1 { margin-top: 10px; }
-.mt-2 { margin-top: 20px; }
-.mt-3 { margin-top: 30px; }
+.mt-1 {
+  margin-top: 10px;
+}
 
-.mb-1 { margin-bottom: 10px; }
-.mb-2 { margin-bottom: 20px; }
-.mb-3 { margin-bottom: 30px; }
+.mt-2 {
+  margin-top: 20px;
+}
+
+.mt-3 {
+  margin-top: 30px;
+}
+
+.mb-1 {
+  margin-bottom: 10px;
+}
+
+.mb-2 {
+  margin-bottom: 20px;
+}
+
+.mb-3 {
+  margin-bottom: 30px;
+}
 
 .flex {
   display: flex;
@@ -536,8 +557,18 @@ select.form-control {
   align-items: center;
 }
 
-.gap-1 { gap: 10px; }
-.gap-2 { gap: 20px; }
+.gap-1 {
+  gap: 10px;
+}
+
+.gap-2 {
+  gap: 20px;
+}
+
+.flex-gap {
+  display: flex;
+  gap: 10px;
+}
 
 .hidden {
   display: none !important;
@@ -548,24 +579,26 @@ select.form-control {
   .container {
     padding: 10px;
   }
-  
+
   .auth-container {
     margin: 50px auto;
   }
-  
+
   .card {
     padding: 20px;
   }
-  
+
   .nav-links {
     flex-direction: column;
     gap: 10px;
   }
-  
-  .grid-2, .grid-3, .grid-4 {
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
     grid-template-columns: 1fr;
   }
-  
+
   .stat-value {
     font-size: 28px;
   }

@@ -25,34 +25,35 @@
     </nav>
 
     <div class="container">
-        <div class="flex-between mb-2">
-            <h1>📅 Daily Planner</h1>
+        <div class="flex-gap">
+            <button class="btn btn-secondary" onclick="openAIPlanModal()">✨ Auto-Plan</button>
             <button class="btn btn-primary" onclick="openAddTaskModal()">+ Add Task</button>
         </div>
+    </div>
 
-        <!-- Today's Progress -->
-        <div class="card mb-2">
-            <h2>Today's Progress</h2>
-            <div id="today-progress">
-                <div class="spinner"></div>
-            </div>
+    <!-- Today's Progress -->
+    <div class="card mb-2">
+        <h2>Today's Progress</h2>
+        <div id="today-progress">
+            <div class="spinner"></div>
         </div>
+    </div>
 
-        <!-- Today's Tasks -->
-        <div class="card">
-            <h2>Today's Tasks</h2>
-            <div id="today-tasks">
-                <div class="spinner"></div>
-            </div>
+    <!-- Today's Tasks -->
+    <div class="card">
+        <h2>Today's Tasks</h2>
+        <div id="today-tasks">
+            <div class="spinner"></div>
         </div>
+    </div>
 
-        <!-- All Tasks -->
-        <div class="card mt-2">
-            <h2>All Tasks</h2>
-            <div id="all-tasks">
-                <div class="spinner"></div>
-            </div>
+    <!-- All Tasks -->
+    <div class="card mt-2">
+        <h2>All Tasks</h2>
+        <div id="all-tasks">
+            <div class="spinner"></div>
         </div>
+    </div>
     </div>
 
     <!-- Add Task Modal -->
@@ -82,9 +83,50 @@
                     <label for="task-duration">Duration (hours)</label>
                     <input type="number" id="task-duration" class="form-control" min="0.25" step="0.25" required>
                 </div>
-                <div class="flex gap-1">
+                <div class="flex-gap">
                     <button type="submit" class="btn btn-primary">Add Task</button>
                     <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Plan Modal -->
+    <div id="ai-plan-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✨ AI Study Planner</h2>
+                <button class="modal-close" onclick="closeAIPlanModal()">&times;</button>
+            </div>
+            <form id="ai-plan-form">
+                <div class="form-group">
+                    <label>Select Subjects</label>
+                    <div id="ai-subjects-container" class="grid-2">
+                        <!-- Checkboxes will be populated here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ai-hours">Available Hours/Day</label>
+                    <input type="number" id="ai-hours" class="form-control" min="1" max="16" value="4" required>
+                </div>
+                <div class="form-group">
+                    <label for="ai-exam-date">Exam Date (or Target Date)</label>
+                    <input type="date" id="ai-exam-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="ai-academic-level">Academic Level (Class)</label>
+                    <select id="ai-academic-level" class="form-control">
+                        <option value="Class 10">Class 10</option>
+                        <option value="Class 11">Class 11</option>
+                        <option value="Class 12">Class 12</option>
+                        <option value="UPSC">UPSC</option>
+                        <option value="SSC">SSC</option>
+                        <option value="Graduation">Graduation</option>
+                    </select>
+                </div>
+                <div class="flex-gap">
+                    <button type="submit" class="btn btn-primary" id="ai-plan-btn">Generate Plan</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAIPlanModal()">Cancel</button>
                 </div>
             </form>
         </div>

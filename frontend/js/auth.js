@@ -112,6 +112,7 @@ if (registerForm) {
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const academicLevel = document.getElementById('academic-level').value;
         const submitBtn = registerForm.querySelector('button[type="submit"]');
 
         if (password.length < 6) {
@@ -129,7 +130,7 @@ if (registerForm) {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ name, email, password })
+                body: JSON.stringify({ name, email, password, academicLevel })
             });
 
             const data = await response.json();

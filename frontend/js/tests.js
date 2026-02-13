@@ -164,6 +164,78 @@ document.getElementById('create-test-form').addEventListener('submit', (e) => {
   document.getElementById('questions-modal').classList.add('active');
 });
 
+// Generate AI Questions
+async function generateAIQuestions() {
+  const subjectSelect = document.getElementById('test-subject');
+  const subjectId = subjectSelect.value;
+  const subjectName = subjectSelect.options[subjectSelect.selectedIndex].text;
+  const topic = document.getElementById('test-topic').value;
+  const count = document.getElementById('num-questions').value;
+  const btn = document.getElementById('ai-generate-btn');
+
+  if (!subjectId || !topic) {
+    alert('Please select a subject and enter a topic for AI generation');
+    return;
+  }
+
+  try {
+    btn.disabled = true;
+    btn.innerHTML = '✨ Generating...';
+    const academicLevel = document.getElementById('test-academic-level') ? document.getElementById('test-academic-level').value : 'General';
+    if (typeof log === 'function') log(`Generating questions for ${academicLevel}...`);
+
+    const response = await fetch(`${API_URL}/ai/generate-questions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ subject: subjectName, topic, count, academicLevel })
+    });
+
+    if (!response.ok) throw new Error('Failed to generate questions');
+
+    const questions = await response.json();
+
+    // Populate the questions modal
+    let html = '';
+    questions.forEach((q, i) => {
+      html += `
+          <div class="card mb-2">
+            <h3>Question ${i + 1}</h3>
+            <div class="form-group">
+              <label>Question</label>
+              <input type="text" class="form-control question-text" data-index="${i}" value="${q.question}" required>
+            </div>
+            ${q.options.map((opt, optIndex) => `
+                <div class="form-group">
+                  <label>Option ${String.fromCharCode(65 + optIndex)}</label>
+                  <input type="text" class="form-control option-input" data-index="${i}" data-option="${optIndex}" value="${opt}" required>
+                </div>
+            `).join('')}
+            <div class="form-group">
+              <label>Correct Answer</label>
+              <select class="form-control correct-answer" data-index="${i}" required>
+                <option value="0" ${q.correctAnswer === 0 ? 'selected' : ''}>A</option>
+                <option value="1" ${q.correctAnswer === 1 ? 'selected' : ''}>B</option>
+                <option value="2" ${q.correctAnswer === 2 ? 'selected' : ''}>C</option>
+                <option value="3" ${q.correctAnswer === 3 ? 'selected' : ''}>D</option>
+              </select>
+            </div>
+          </div>
+        `;
+    });
+
+    document.getElementById('questions-container').innerHTML = html;
+    closeCreateTestModal();
+    document.getElementById('questions-modal').classList.add('active');
+
+  } catch (error) {
+    alert('Error generating questions: ' + error.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ Generate with AI';
+  }
+}
+
 // Close questions modal
 function closeQuestionsModal() {
   document.getElementById('questions-modal').classList.remove('active');

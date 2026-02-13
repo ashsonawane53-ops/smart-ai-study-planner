@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -13,6 +14,7 @@ const testRoutes = require('./routes/tests');
 const revisionRoutes = require('./routes/revisions');
 const doubtRoutes = require('./routes/doubts');
 const dashboardRoutes = require('./routes/dashboard');
+const aiRoutes = require('./routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -20,33 +22,33 @@ const PORT = process.env.PORT || 5001;
 // Connect to MongoDB
 connectDB();
 
+// Middleware
+app.use(cors({
+    origin: true, // Allow all origins for development
+    credentials: true
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Request logging middleware
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
 });
 
-// Middleware
-app.use(cors({
-    origin: 'http://localhost:5001',
-    credentials: true
-}));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 // Session configuration
 app.use(session({
-    secret: 'ai-study-planner-secret-key-2026',
+    secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: 'mongodb://localhost:27017/ai-study-planner',
+        mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/ai-study-planner',
         touchAfter: 24 * 3600 // lazy session update
     }),
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         httpOnly: true,
-        secure: false, // set to true if using HTTPS
+        secure: process.env.NODE_ENV === 'production', // true in production
         sameSite: 'lax'
     }
 }));
@@ -62,17 +64,14 @@ app.use('/api/tests', testRoutes);
 app.use('/api/revisions', revisionRoutes);
 app.use('/api/doubts', doubtRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Serve frontend for all other routes
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Request logging middleware
-app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next();
-});
+
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
