@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points - AI Study Planner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">📚 AI Study Planner</div>
+            <div class="nav-links">
+                <a href="app.html" class="active">Dashboard</a>
+                <a href="subjects.html">Subjects</a>
+                <a href="planner.html">Planner</a>
+                <a href="tests.html">Tests</a>
+                <a href="revisions.html">Revisions</a>
+                <a href="doubts.html">Doubts</a>
+                <a href="#" onclick="logout()" style="color: #ef4444;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-2">Welcome, <span id="user-name">Student</span>! 👋</h1>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-4 mb-3">
+            <div class="stat-card">
+                <div class="stat-value" id="total-hours">0</div>
+                <div class="stat-label">Total Study Hours</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <div class="stat-value" id="completion-percentage">0%</div>
+                <div class="stat-label">Today's Progress</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <div class="stat-value" id="avg-test-score">0%</div>
+                <div class="stat-label">Avg Test Score</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <div class="stat-value" id="pending-revisions">0</div>
+                <div class="stat-label">Pending Revisions</div>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <!-- Today's Tasks -->
+            <div class="card">
+                <div class="card-header">
+                    📝 Today's Tasks
+                    <a href="planner.html" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div id="today-tasks-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+
+            <!-- Upcoming Tasks -->
+            <div class="card">
+                <div class="card-header">📅 Upcoming Tasks</div>
+                <div id="upcoming-tasks-container">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject-wise Study Hours -->
+        <div class="card mt-2">
+            <div class="card-header">📊 Subject-wise Study Hours (Last 30 Days)</div>
+            <div id="subject-stats-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Test Performance -->
+        <div class="card mt-2">
+            <div class="card-header">🎯 Recent Test Performance</div>
+            <div id="test-performance-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- Pending Revisions -->
+        <div class="card mt-2">
+            <div class="card-header">
+                🔄 Pending Revisions
+                <a href="revisions.html" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div id="pending-revisions-container">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debug Console -->
+    <div id="debug-console"
+        style="position: fixed; bottom: 0; left: 0; right: 0; height: 150px; background: rgba(0,0,0,0.9); color: #0f0; font-family: monospace; padding: 10px; overflow-y: auto; z-index: 9999; border-top: 2px solid #0f0; font-size: 12px;">
+        <div>Debug Console Initialized...</div>
+    </div>
+
+    <script>
+        function log(msg) {
+            const el = document.createElement('div');
+            el.textContent = `${new Date().toLocaleTimeString()} - ${msg}`;
+            document.getElementById('debug-console').prepend(el);
+            console.log(msg);
+        }
+        window.onerror = function (msg, url, line) {
+            log(`ERROR: ${msg} at ${url}:${line}`);
+        };
+        log('Page Loaded. Waiting for scripts...');
+    </script>
+
+    <script src="js/auth.js?v=AppNew"></script>
+    <script src="js/app.js?v=AppNew"></script>
+</body>
+
+</html>

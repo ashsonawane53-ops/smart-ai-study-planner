@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubt Solver - AI Study Planner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">📚 AI Study Planner</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="subjects.html">Subjects</a>
+                <a href="planner.html">Planner</a>
+                <a href="tests.html">Tests</a>
+                <a href="revisions.html">Revisions</a>
+                <a href="doubts.html" class="active">Doubts</a>
+                <a href="#" onclick="logout()" style="color: #ef4444;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="mb-2">🤖 AI Doubt Solver</h1>
+
+        <div class="alert alert-info mb-2">
+            💡 <strong>Tip:</strong> Ask clear, specific questions for better AI responses. Include keywords related to
+            your topic!
+        </div>
+
+        <!-- Ask Doubt Section -->
+        <div class="card mb-2">
+            <h2>Ask Your Doubt</h2>
+            <form id="doubt-form">
+                <div class="form-group">
+                    <label for="doubt-subject">Subject (Optional)</label>
+                    <select id="doubt-subject" class="form-control">
+                        <option value="">General / Not specific to a subject</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="doubt-question">Your Question</label>
+                    <textarea id="doubt-question" class="form-control" rows="4"
+                        placeholder="e.g., How do I find the derivative of x²?" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Get AI Response</button>
+            </form>
+        </div>
+
+        <!-- AI Response Section -->
+        <div id="ai-response-section" class="card mb-2 hidden">
+            <h2>AI Response</h2>
+            <div id="ai-response-content"></div>
+        </div>
+
+        <!-- Doubt History -->
+        <div class="card">
+            <h2>📜 Doubt History</h2>
+            <div id="doubt-history">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/doubts.js"></script>
+</body>
+
+</html>

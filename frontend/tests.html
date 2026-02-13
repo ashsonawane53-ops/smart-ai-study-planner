@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests - AI Study Planner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">📚 AI Study Planner</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="subjects.html">Subjects</a>
+                <a href="planner.html">Planner</a>
+                <a href="tests.html" class="active">Tests</a>
+                <a href="revisions.html">Revisions</a>
+                <a href="doubts.html">Doubts</a>
+                <a href="#" onclick="logout()" style="color: #ef4444;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="flex-between mb-2">
+            <h1>🎯 Tests</h1>
+            <button class="btn btn-primary" onclick="openCreateTestModal()">+ Create Test</button>
+        </div>
+
+        <!-- Test History -->
+        <div class="card">
+            <h2>Test History</h2>
+            <div id="test-history">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Test Modal -->
+    <div id="create-test-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Test</h2>
+                <button class="modal-close" onclick="closeCreateTestModal()">&times;</button>
+            </div>
+            <form id="create-test-form">
+                <div class="form-group">
+                    <label for="test-subject">Subject</label>
+                    <select id="test-subject" class="form-control" required>
+                        <option value="">Select subject...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="test-title">Test Title</label>
+                    <input type="text" id="test-title" class="form-control" placeholder="e.g., Chapter 5 Quiz" required>
+                </div>
+                <div class="form-group">
+                    <label>Number of Questions</label>
+                    <input type="number" id="num-questions" class="form-control" min="1" max="20" value="5" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Questions</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Questions Modal -->
+    <div id="questions-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Questions</h2>
+                <button class="modal-close" onclick="closeQuestionsModal()">&times;</button>
+            </div>
+            <div id="questions-container"></div>
+            <button class="btn btn-primary btn-block" onclick="saveTest()">Save Test</button>
+        </div>
+    </div>
+
+    <!-- Take Test Modal -->
+    <div id="take-test-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="test-title-display"></h2>
+                <button class="modal-close" onclick="closeTakeTestModal()">&times;</button>
+            </div>
+            <div id="test-questions-container"></div>
+            <button class="btn btn-success btn-block" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Test Results</h2>
+                <button class="modal-close" onclick="closeResultsModal()">&times;</button>
+            </div>
+            <div id="results-container"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/tests.js"></script>
+</body>
+
+</html>

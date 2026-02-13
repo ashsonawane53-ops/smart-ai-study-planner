@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Debugger</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .success {
+            color: #00ff00;
+        }
+
+        .error {
+            color: #ff0000;
+        }
+
+        .warning {
+            color: #ffff00;
+        }
+
+        .log {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #333;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 System Diagnostic Tool</h1>
+    <div id="status">Initializing...</div>
+    <hr>
+    <div id="logs"></div>
+
+    <script>
+        function log(msg, type = 'info') {
+            const el = document.createElement('div');
+            el.className = 'log ' + type;
+            el.textContent = `${new Date().toLocaleTimeString()} - ${msg}`;
+            document.getElementById('logs').appendChild(el);
+        }
+
+        async function runDiagnostics() {
+            log('Starting diagnostics...', 'info');
+
+            // 1. Check if JS is running
+            log('JavaScript is running correctly', 'success');
+
+            // 2. Test Backend Connectivity
+            const API_URL = 'http://localhost:5000/api';
+
+            try {
+                log(`Attempting to connect to ${API_URL}/auth/check-auth...`, 'warning');
+
+                const startTime = Date.now();
+                const response = await fetch(`${API_URL}/auth/check-auth`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include'
+                });
+
+                const duration = Date.now() - startTime;
+                log(`Connection successful in ${duration}ms`, 'success');
+                log(`Status Code: ${response.status}`, 'info');
+
+                const text = await response.text();
+                log(`Server Response: ${text}`, 'info');
+
+                try {
+                    const data = JSON.parse(text);
+                    if (data.authenticated) {
+                        log('User IS authenticated', 'success');
+                    } else {
+                        log('User is NOT authenticated (this is expected if not logged in)', 'warning');
+                    }
+                } catch (e) {
+                    log('Could not parse JSON response', 'error');
+                }
+
+            } catch (error) {
+                log('CONNECTION FAILED!', 'error');
+                log(`Error Name: ${error.name}`, 'error');
+                log(`Error Message: ${error.message}`, 'error');
+                log('Possible causes:', 'warning');
+                log('1. Server is not running', 'info');
+                log('2. CORS blocking (Cross-Origin Resource Sharing)', 'info');
+                log('3. Mixed Content (HTTP vs HTTPS)', 'info');
+            }
+        }
+
+        runDiagnostics();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisions - AI Study Planner</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">📚 AI Study Planner</div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="subjects.html">Subjects</a>
+                <a href="planner.html">Planner</a>
+                <a href="tests.html">Tests</a>
+                <a href="revisions.html" class="active">Revisions</a>
+                <a href="doubts.html">Doubts</a>
+                <a href="#" onclick="logout()" style="color: #ef4444;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="flex-between mb-2">
+            <h1>🔄 Revision Tracker</h1>
+            <button class="btn btn-primary" onclick="openAddRevisionModal()">+ Add Topic</button>
+        </div>
+
+        <div class="alert alert-info mb-2">
+            💡 <strong>Spaced Repetition:</strong> Topics are automatically scheduled for revision after 3 days, then 7
+            days, to improve retention.
+        </div>
+
+        <!-- Pending Revisions -->
+        <div class="card mb-2">
+            <h2>⚠️ Pending Revisions</h2>
+            <div id="pending-revisions">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <!-- All Revisions -->
+        <div class="card">
+            <h2>📋 All Revisions</h2>
+            <div id="all-revisions">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Revision Modal -->
+    <div id="revision-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Topic for Revision</h2>
+                <button class="modal-close" onclick="closeRevisionModal()">&times;</button>
+            </div>
+            <form id="revision-form">
+                <div class="form-group">
+                    <label for="revision-subject">Subject</label>
+                    <select id="revision-subject" class="form-control" required>
+                        <option value="">Select subject...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="revision-topic">Topic</label>
+                    <input type="text" id="revision-topic" class="form-control"
+                        placeholder="e.g., Derivatives and Integration" required>
+                </div>
+                <div class="form-group">
+                    <label for="study-date">Study Date</label>
+                    <input type="date" id="study-date" class="form-control" required>
+                </div>
+                <div class="flex gap-1">
+                    <button type="submit" class="btn btn-primary">Add Topic</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeRevisionModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js?v=2"></script>
+    <script src="js/revisions.js"></script>
+</body>
+
+</html>

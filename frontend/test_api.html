@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API Diagnostic</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #222;
+            color: #fff;
+        }
+
+        .log {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #444;
+            padding: 5px;
+        }
+
+        .success {
+            color: #0f0;
+        }
+
+        .error {
+            color: #f00;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>API Connection Tester</h1>
+    <button class="btn" onclick="runTest()">Run Test</button>
+    <div id="output"></div>
+
+    <script>
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = 'log ' + type;
+            div.textContent = `${new Date().toLocaleTimeString()} - ${msg}`;
+            document.getElementById('output').appendChild(div);
+        }
+
+        async function runTest() {
+            log('Starting network test...');
+
+            // Test 1: Fetch Relative Path
+            try {
+                log('Attempting fetch: /api/auth/check-auth');
+                const start = Date.now();
+                const res = await fetch('/api/auth/check-auth', { credentials: 'include' });
+                const duration = Date.now() - start;
+
+                log(`Response received in ${duration}ms`, 'success');
+                log(`Status: ${res.status} ${res.statusText}`, res.ok ? 'success' : 'error');
+
+                const text = await res.text();
+                log(`Body: ${text.substring(0, 100)}...`);
+
+            } catch (e) {
+                log(`FETCH FAILED: ${e.message}`, 'error');
+            }
+
+            // Test 2: Fetch Absolute Path
+            // Test 3: Fetch Dashboard Stats
+            try {
+                log('Attempting fetch: /api/dashboard/stats');
+                const start = Date.now();
+                const res = await fetch('/api/dashboard/stats', { credentials: 'include' });
+                const duration = Date.now() - start;
+
+                log(`Stats Response received in ${duration}ms`, 'success');
+                log(`Stats Status: ${res.status} ${res.statusText}`, res.ok ? 'success' : 'error');
+
+                const text = await res.text();
+                log(`Stats Body: ${text.substring(0, 200)}...`);
+            } catch (e) {
+                log(`STATS FETCH FAILED: ${e.message}`, 'error');
+            }
+        }
+
+        window.onload = runTest;
+    </script>
+</body>
+
+</html>

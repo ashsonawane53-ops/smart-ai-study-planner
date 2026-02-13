@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AI Study Planner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="auth-container">
+    <div class="card">
+      <h1 class="text-center mb-2">📚 AI Study Planner</h1>
+      <p class="text-center mb-3" style="color: #6b7280;">Plan smarter, study better</p>
+
+      <div id="alert-container"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+      </form>
+
+      <p class="text-center mt-2">
+        Don't have an account? <a href="register.html" style="color: #6366f1; font-weight: 600;">Register here</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/auth.js?v=2"></script>
+</body>
+
+</html> 
+<footer>
+  <p>© <span id="year"></span> Ashwini Sonawane. All Rights Reserved.</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
